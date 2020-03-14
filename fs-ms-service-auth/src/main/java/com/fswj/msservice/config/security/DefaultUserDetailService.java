@@ -1,5 +1,6 @@
 package com.fswj.msservice.config.security;
 
+import com.fswj.msservice.domain.SysUser;
 import com.fswj.msservice.service.SysUserService;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,9 @@ public class DefaultUserDetailService implements UserDetailsService {
     private SysUserService sysUserService;
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return sysUserService.getByUsername(username);
+        SysUser byUsername = sysUserService.getByUsername(username);
+        if (byUsername == null)
+            throw new UsernameNotFoundException("用户不存在");
+        return byUsername;
     }
 }
